@@ -497,6 +497,12 @@
     <div class="container">
         <h1>アンケート<br>アンケートフォーム</h1>
         <div class="info-text">以下全て入力後【アンケート送信】ボタンを押してください。</div>
+        <div class="label">性別</div>
+        <div class="Introduction-buttons">
+            <button type="button" id="oneIntroduction" onclick="selectIntroduction(this)">男性</button>
+            <button type="button" id="twoIntroduction" onclick="selectIntroduction(this)">女性</button>
+        </div>
+
         <div class="label">年代</div>
         <div class="priority-buttons">
             <button type="button" id="onepriority" onclick="selectpriority(this)">20代</button>
@@ -509,6 +515,7 @@
 
         <div class="label">症状</div>
         <div class="demand-buttons">
+            <button type="button" id="onedemand" onclick="selectdemand(this)">健康保険診療</button>
             <button type="button" id="onedemand" onclick="selectdemand(this)">妊婦</button>
             <button type="button" id="twodemand" onclick="selectdemand(this)">産後</button>
             <button type="button" id="threedemand" onclick="selectdemand(this)">頭痛</button>
@@ -637,12 +644,14 @@
             priorityCount: priorityCount;
             demandCount: demandCount;
             chanceCount: chanceCount;
+            IntroductionCount: IntroductionCount;
 
             const formData = {
                 message,
                 message2,
                 message3,
                 priorityCount,
+                IntroductionCount,
                 demandCount,
                 chanceCount,
             };
@@ -683,10 +692,16 @@
                 return;
             }
 
+            // フォームデータのチェック
+            if (!formData.IntroductionCount) {
+                alert('性別をご選択ください。');
+                return;
+            }
+
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `≪アンケート≫\n【年代】\n・${formData.priorityCount}\n\n【症状】\n・${formData.demandCount}\n\n【通院状態】\n・${formData.chanceCount}\n\n【当院に通ってくれている理由】\n・${formData.message}\n\n【通院をやめた理由】\n・${formData.message2}\n\n【要望・ご意見】\n・${formData.message3}`
+                text: `≪アンケート≫\n【性別】\n・${formData.IntroductionCount}\n\n【年代】\n・${formData.priorityCount}\n\n【症状】\n・${formData.demandCount}\n\n【通院状態】\n・${formData.chanceCount}\n\n【当院に通ってくれている理由】\n・${formData.message}\n\n【通院をやめた理由】\n・${formData.message2}\n\n【要望・ご意見】\n・${formData.message3}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
                 alert('ご記入ありがとうございます。');
